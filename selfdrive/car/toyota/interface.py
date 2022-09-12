@@ -144,12 +144,19 @@ class CarInterface(CarInterfaceBase):
       ret.mass = 3060. * CV.LB_TO_KG + STD_CARGO_KG
 
     elif candidate in (CAR.LEXUS_ES_TSS2, CAR.LEXUS_ESH_TSS2, CAR.LEXUS_ESH):
-      stop_and_go = True
-      ret.wheelbase = 2.8702
-      ret.steerRatio = 16.0  # not optimized
-      tire_stiffness_factor = 0.444  # not optimized yet
-      ret.mass = 3677. * CV.LB_TO_KG + STD_CARGO_KG  # mean between min and max
+      #stop_and_go = True
+      #ret.wheelbase = 2.8702
+      #ret.steerRatio = 16.0  # not optimized
+      #tire_stiffness_factor = 0.444  # not optimized yet
+      #ret.mass = 3677. * CV.LB_TO_KG + STD_CARGO_KG  # mean between min and max
+      #set_lat_tune(ret.lateralTuning, LatTunes.PID_D)
+      stop_and_go = True      
+      ret.wheelbase = 2.82
+      ret.steerRatio = 13.3
+      tire_stiffness_factor = 0.7983
+      ret.mass = 3260 * CV.LB_TO_KG + 230 + STD_CARGO_KG  # mean between min and max
       set_lat_tune(ret.lateralTuning, LatTunes.PID_D)
+
 
     elif candidate == CAR.SIENNA:
       stop_and_go = True

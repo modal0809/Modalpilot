@@ -15,6 +15,8 @@ MAX_TERMINAL_DURATION = int(30 / DT_DMON)  # not allowed to engage after 30s of 
 from common.realtime import Ratekeeper
 
 def dpmonitoringd_thread(sm=None, pm=None):
+  return
+  
   rk = Ratekeeper(10, print_delay_threshold=None)  # Keeps rate at 10 hz
   gc.disable()
   set_realtime_priority(2)
