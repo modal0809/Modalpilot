@@ -26,7 +26,8 @@ class DriverStatus():
   def update_events(self, events, driver_engaged, ctrl_active, standstill):
     #modal
     self.awareness = 1.
-      
+    return
+
+
 if __name__ == "__main__":
   pass
-
