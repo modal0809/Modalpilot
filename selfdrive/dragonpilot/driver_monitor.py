@@ -24,38 +24,9 @@ class DriverStatus():
     self.step_change = DT_DMON / _AWARENESS_TIME
 
   def update_events(self, events, driver_engaged, ctrl_active, standstill):
-    if (driver_engaged and self.awareness > 0) or not ctrl_active:
-      # always reset if driver is in control (unless we are in red alert state) or op isn't active
-      self.awareness = 1.
-      return
-
-    awareness_prev = self.awareness
-
-    if not (standstill and self.awareness - self.step_change <= self.threshold_prompt):
-      self.awareness = max(self.awareness - self.step_change, -0.1)
-
-    alert = None
-    if self.awareness <= 0.:
-      # terminal red alert: disengagement required
-      alert = EventName.driverUnresponsive
-      self.terminal_time += 1
-      if awareness_prev > 0.:
-        self.terminal_alert_cnt += 1
-    elif self.awareness <= self.threshold_prompt:
-      # prompt orange alert
-      alert = EventName.promptDriverUnresponsive
-    elif self.awareness <= self.threshold_pre:
-      # pre green alert
-      alert = EventName.preDriverUnresponsive
-
-    # print("trigger to green in: %s secs" % ((self.threshold_pre - self.awareness) / self.step_change * DT_DMON))
-    # print("trigger to orange in: %s secs" % ((self.threshold_prompt - self.awareness) / self.step_change * DT_DMON))
-    # print("trigger to red in: %s secs" % ((0 - self.awareness) / self.step_change * DT_DMON))
-    # print("---------------------------------------------------------------------------")
-
-    if alert is not None:
-      events.add(alert)
-
+    #modal
+    self.awareness = 1.
+      
 if __name__ == "__main__":
   pass
 

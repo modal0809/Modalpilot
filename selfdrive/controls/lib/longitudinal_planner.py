@@ -46,7 +46,8 @@ _DP_CRUISE_MIN_V_SPORT = [-0.1, -0.2, -0.4, -0.5, -0.5, -0.25, -0.1]
 _DP_CRUISE_MIN_BP = [0.0, 3.0, 5.0, 20.0, 33.3, 40.0, 55.0]
 
 _DP_CRUISE_MAX_V = [3.5, 1.7, 1.31, 0.95, 0.77, 0.67, 0.55, 0.47, 0.31, 0.13]
-_DP_CRUISE_MAX_V_ECO = [0.9, 0.8, 0.75, 0.65, 0.48, 0.35, 0.25, 0.15, 0.12, 0.06]
+modal
+_DP_CRUISE_MAX_V_ECO = [0.85, 0.75, 0.65, 0.60, 0.50, 0.35, 0.25, 0.15, 0.12, 0.06]
 _DP_CRUISE_MAX_V_SPORT = [3.5, 3.5, 2.5, 1.5, 2.0, 2.0, 2.0, 1.5, 1.0, 0.5]
 _DP_CRUISE_MAX_BP = [0., 3, 6., 8., 11., 15., 20., 25., 30., 55.]
 
@@ -135,11 +136,9 @@ class Planner:
     # Get acceleration and active solutions for custom long mpc.
     self.cruise_source, a_min_sol, v_cruise_sol = self.cruise_solutions(not reset_state, self.v_desired_filter.x,
                                                                         self.a_desired, v_cruise, sm)
-
-    if not self.dp_accel_profile_ctrl:
-      accel_limits = [A_CRUISE_MIN, get_max_accel(v_ego)]
-    else:
-      accel_limits = dp_calc_cruise_accel_limits(v_ego, self.dp_accel_profile)
+    
+    #modal
+    accel_limits = dp_calc_cruise_accel_limits(v_ego, self.dp_accel_profile)
     accel_limits_turns = limit_accel_in_turns(v_ego, sm['carState'].steeringAngleDeg, accel_limits, self.CP)
     if force_slow_decel:
       # if required so, force a smooth deceleration

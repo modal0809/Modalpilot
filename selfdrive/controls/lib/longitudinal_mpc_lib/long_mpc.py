@@ -341,17 +341,22 @@ class LongitudinalMpc:
     self.cruise_max_a = max_a
 
   def update_TF(self, carstate):
-    if carstate.distanceLines == 1: # Traffic
-      # At slow speeds more time, decrease time up to 60mph
-      # in mph ~= 5     10   15   20  25     30    35     40  45     50    55     60  65     70    75     80  85     90
-      x_vel = [0, 2.25, 4.5, 6.75, 9, 11.25, 13.5, 15.75, 18, 20.25, 22.5, 24.75, 27, 29.25, 31.5, 33.75, 36, 38.25, 40.5]
-      #y_dist = [1.25, 1.24, 1.23, 1.22, 1.21, 1.20, 1.18, 1.16, 1.13, 1.11, 1.09, 1.07, 1.05, 1.05, 1.05, 1.05, 1.05, 1.05, 1.05]
-      y_dist = [1.13, 1.24, 1.23, 1.22, 1.21, 1.20, 1.18, 1.16, 1.13, 1.11, 1.09, 1.07, 1.05, 1.05, 1.05, 1.05, 1.05, 1.05, 1.05]
-      self.desired_TF = np.interp(carstate.vEgo, x_vel, y_dist)
-    elif carstate.distanceLines == 2: # Relaxed
-      self.desired_TF = T_FOLLOW #1.25
-    else:
-      self.desired_TF = 1.8 #T_FOLLOW
+    #modal 強制使用這個距離控制
+    x_vel = [0.0,  1,    2.78,  5.56,   8.33,  11.11, 13.89, 16.67, 19.44, 22.22, 25.0, 27.78, 30.56, 33.33, 36.11, 38.89, 41.67]
+    y_dist = [1.1, 1.15, 1.25,  1.3,   1.3368, 1.3368, 1.3, 1.24,  1.16,  1.2,  1.21, 1.22,  1.23,  1.24,   1.25,  1.26,  1.27]
+    self.desired_TF = np.interp(carstate.vEgo, x_vel, y_dist)
+    
+    #if carstate.distanceLines == 1: # Traffic
+    #  # At slow speeds more time, decrease time up to 60mph
+    #  # in mph ~= 5     10   15   20  25     30    35     40  45     50    55     60  65     70    75     80  85     90
+    #  x_vel = [0, 2.25, 4.5, 6.75, 9, 11.25, 13.5, 15.75, 18, 20.25, 22.5, 24.75, 27, 29.25, 31.5, 33.75, 36, 38.25, 40.5]
+    #  #y_dist = [1.25, 1.24, 1.23, 1.22, 1.21, 1.20, 1.18, 1.16, 1.13, 1.11, 1.09, 1.07, 1.05, 1.05, 1.05, 1.05, 1.05, 1.05, 1.05]
+    #  y_dist = [1.13, 1.24, 1.23, 1.22, 1.21, 1.20, 1.18, 1.16, 1.13, 1.11, 1.09, 1.07, 1.05, 1.05, 1.05, 1.05, 1.05, 1.05, 1.05]
+    #  self.desired_TF = np.interp(carstate.vEgo, x_vel, y_dist)
+    #elif carstate.distanceLines == 2: # Relaxed
+    #  self.desired_TF = T_FOLLOW #1.25
+    #else:
+    #  self.desired_TF = 1.8 #T_FOLLOW
 
   def update(self, carstate, radarstate, v_cruise, prev_accel_constraint):
     v_ego = self.x0[1]
