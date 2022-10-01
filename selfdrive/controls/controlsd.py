@@ -78,8 +78,9 @@ class Controls:
     self.sm = sm
     if self.sm is None:
       ignore = ['driverCameraState', 'managerState'] if SIMULATION else None
-      if self.dp_jetson:
-        ignore = ['driverCameraState', 'driverMonitoringState'] if ignore is None else ignore + ['driverCameraState', 'driverMonitoringState']
+      #if self.dp_jetson:
+        #ignore = ['driverCameraState', 'driverMonitoringState'] if ignore is None else ignore + ['driverCameraState', 'driverMonitoringState']
+      ignore = ['driverCameraState', 'driverMonitoringState'] if ignore is None else ignore + ['driverCameraState', 'driverMonitoringState']
       self.sm = messaging.SubMaster(['deviceState', 'pandaStates', 'peripheralState', 'modelV2', 'liveCalibration',
                                      'driverMonitoringState', 'longitudinalPlan', 'lateralPlan', 'liveLocationKalman',
                                      'managerState', 'liveParameters', 'radarState', 'dragonConf'] + self.camera_packets + joystick_packet,
@@ -207,8 +208,8 @@ class Controls:
       return
 
     self.events.add_from_msg(CS.events)
-    if not self.dp_jetson:
-      self.events.add_from_msg(self.sm['driverMonitoringState'].events)
+    #if not self.dp_jetson:
+      #self.events.add_from_msg(self.sm['driverMonitoringState'].events)
     self.events.add_from_msg(self.sm['longitudinalPlan'].eventsDEPRECATED)
 
     # Create events for battery, temperature, disk space, and memory

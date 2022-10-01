@@ -151,7 +151,16 @@ class CarInterface(CarInterfaceBase):
       tire_stiffness_factor = 0.444  # not optimized yet
       ret.mass = 3677. * CV.LB_TO_KG + STD_CARGO_KG  # mean between min and max
       set_lat_tune(ret.lateralTuning, LatTunes.PID_D)
-
+    
+    #modal
+    elif candidate == CAR.LEXUS_ESC:
+      stop_and_go = True      
+      ret.wheelbase = 2.82
+      ret.steerRatio = 13.3
+      tire_stiffness_factor = 0.444
+      ret.mass = 3260 * CV.LB_TO_KG + 230 + STD_CARGO_KG  # mean between min and max
+      set_lat_tune(ret.lateralTuning, LatTunes.PID_J)
+      
     elif candidate == CAR.SIENNA:
       stop_and_go = True
       ret.wheelbase = 3.03

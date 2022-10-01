@@ -86,6 +86,7 @@ def dmonitoringd_thread(sm=None, pm=None):
 
 
 def main(sm=None, pm=None):
+  return    #modal
   dmonitoringd_thread(sm, pm)
 
 
