@@ -31,7 +31,8 @@ class Appd():
 
   def __init__(self):
     self.started = False
-
+    self.db_msg = ''
+    
     if os.path.exists(FILE):
       with open(FILE) as f:
         self.app_data = json.load(f)
@@ -39,39 +40,60 @@ class Appd():
       self.app_data = None
 
   def update(self, started):
-    if self.app_data is not None:
-      if started:
-        if not self.started:
+    started = True #444   
+    if self.app_data is not None:      
+      if started:        
+        if not self.started:          
           self.started = True
           self.onroad()
       else:
-        if self.started:
+        if self.started:          
           self.started = False
           self.offroad()
+          
+    #return self.db_msg
 
   def onroad(self):
+    #if len(self.db_msg) < 12:
+      #self.db_msg = self.db_msg + '1'
     for app in self.app_data:
+      #if len(self.db_msg) < 12:
+        #self.db_msg = self.db_msg + '2'
       if app['app'] == 'lan.rick.pandagpsservice' and self.installed(app['app']):
+        #if len(self.db_msg) < 12:
+          #self.db_msg = self.db_msg + '3'
         self.system('pm uninstall lan.rick.pandagpsservice')
         pass
       if not self.installed(app['app']) and os.path.exists(app['apk']):
+        #if len(self.db_msg) < 12:
+          #self.db_msg = self.db_msg + '4'
         self.system("pm install -r %s" % app['apk'])
-      for cmd in app['onroad_cmd']:
+      for cmd in app['onroad_cmd']:        
         self.system(cmd)
-
+        
   def offroad(self):
+    #if len(self.db_msg) < 12:
+      #self.db_msg = self.db_msg + '5'
+      
     for app in self.app_data:
       if self.installed(app['app']):
         for cmd in app['offroad_cmd']:
           self.system(cmd)
 
   def installed(self, app_name):
+    #if len(self.db_msg) < 12:
+      #self.db_msg = self.db_msg + '6'
     try:
       result = subprocess.check_output(["dumpsys", "package", app_name, "|", "grep", "versionName"], encoding='utf8')
       if len(result) > 12:
+        #if len(self.db_msg) < 12:
+          #self.db_msg = self.db_msg + '7'
         return True
     except:
       pass
+    
+    #if len(self.db_msg) < 12:
+      #self.db_msg = self.db_msg + '8'
     return False
 
   def system(self, cmd):

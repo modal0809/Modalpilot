@@ -34,6 +34,7 @@ params = Params()
 from common.dp_common import param_get, get_last_modified
 from common.dp_time import LAST_MODIFIED_SYSTEMD
 from selfdrive.dragonpilot.dashcamd import Dashcamd
+from selfdrive.dragonpilot.appd import Appd
 from selfdrive.hardware import EON
 import socket
 from common.realtime import Ratekeeper
@@ -60,6 +61,7 @@ def confd_thread():
   free_space = 1
   last_started = False
   dashcamd = Dashcamd()
+  appd = Appd()
   is_eon = EON
   rk = Ratekeeper(HERTZ, print_delay_threshold=None)  # Keeps rate at 2 hz
   uploader_thread = None
@@ -159,6 +161,15 @@ def confd_thread():
     if msg.dragonConf.dpDashcamd and frame % HERTZ == 0:
       dashcamd.run(started, free_space)
     '''
+    # ===================================================
+    # appd
+    # ===================================================
+    '''        
+    #IP = 'test'
+    #IP = appd.update(started)
+    #setattr(msg.dragonConf, get_struct_name('dp_ip_addr'), IP)    
+    appd.update(started)
+    '''
     ===================================================
     finalise
     ===================================================
@@ -239,6 +250,8 @@ def update_ip(msg):
     IP = 'N/A'
   finally:
     s.close()
+    
+  #444 setattr(msg.dragonConf, get_struct_name('dp_ip_addr'), IP)
   setattr(msg.dragonConf, get_struct_name('dp_ip_addr'), IP)
   return msg
 

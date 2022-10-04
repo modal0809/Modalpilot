@@ -43,6 +43,9 @@ LIMIT_COST = 1e6
 DISTANCE_FACTOR_1 = 0.70
 DISTANCE_FACTOR_2 = 0.80
 DISTANCE_FACTOR_3 = 1.00
+DISTANCE_STOP_1 = 3.5
+DISTANCE_STOP_2 = 3.5
+DISTANCE_STOP_3 = 5.5
 
 # Fewer timestamps don't hurt performance and lead to
 # much better convergence of the MPC with low iterations
@@ -55,15 +58,12 @@ T_DIFFS = np.diff(T_IDXS, prepend=[0.])
 MIN_ACCEL = -3.5
 T_FOLLOW = 1.45
 COMFORT_BRAKE = 2.5
-
-#modal
-#STOP_DISTANCE = 5.5
-STOP_DISTANCE = 4.3
+STOP_DISTANCE = 5.5
 
 def get_stopped_equivalence_factor(v_lead, v_ego, t_follow=T_FOLLOW):
   # KRKeegan this offset rapidly decreases the following distance when the lead pulls
   # away, resulting in an early demand for acceleration.
-  my_STOP_DISTANCE = STOP_DISTANCE
+  
   v_diff_offset = 0
   if np.all(v_lead - v_ego > 0):
     v_diff_offset = ((v_lead - v_ego) * 1.)
@@ -351,6 +351,7 @@ class LongitudinalMpc:
       self.desired_TF = np.interp(carstate.vEgo, x_vel, y_dist)
             
       self.desired_TF = self.desired_TF * DISTANCE_FACTOR_1
+      STOP_DISTANCE = DISTANCE_STOP_1
     elif carstate.distanceLines == 2: # Relaxed
       #x_vel = [0.0,  1,    2.78,  5.56,   8.33,  11.11, 13.89, 16.67, 19.44, 22.22, 25.0, 27.78, 30.56, 33.33, 36.11, 38.89, 41.67]
       #y_dist = [1.1, 1.15, 1.25,  1.3,   1.3368, 1.3368, 1.3, 1.24,  1.16,  1.2,  1.21, 1.22,  1.23,  1.24,   1.25,  1.26,  1.27]
@@ -361,6 +362,7 @@ class LongitudinalMpc:
       self.desired_TF = np.interp(carstate.vEgo, x_vel, y_dist)      
       
       self.desired_TF = self.desired_TF * DISTANCE_FACTOR_2
+      STOP_DISTANCE = DISTANCE_STOP_2
     else:
       #x_vel =    [0.00, 1.00,   2.78,   5.56,   8.33,   11.11, 13.89, 16.67, 19.44, 22.22, 25.0, 27.78, 30.56, 33.33, 36.11, 38.89, 41.67]
       #y_dist =   [1.1,  1.15,   1.25,   1.3,    1.3,   1.34,  1.34,  1.40,  1.4,   1.45,  1.45,  1.45,  1.5,   1.55,  1.6,   1.70,  1.8]
@@ -374,6 +376,7 @@ class LongitudinalMpc:
       
       #self.desired_TF = T_FOLLOW
       #self.desired_TF = 1.7
+      STOP_DISTANCE = DISTANCE_STOP_3
       
   def update(self, carstate, radarstate, v_cruise, prev_accel_constraint=False):
     self.update_TF(carstate)
